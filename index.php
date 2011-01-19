@@ -49,7 +49,6 @@ class OACClimateRiskAdmin {
 
 class OACClimateRisk {
 	private static $location_scope = null;
-	private static $in_use = false;
 	private static $plugin_url = '';
 
 	public static function initialize() {
@@ -58,6 +57,7 @@ class OACClimateRisk {
 		self::$plugin_url = plugins_url( 'oac-climaterisk-js-handler.php', __FILE__ );
 		wp_enqueue_script( 'wp-scoper' );
 		wp_enqueue_style ( 'jquery-ui' );
+		wp_enqueue_style ( 'jqplot' );
 	}
 
 
@@ -78,6 +78,7 @@ class OACClimateRisk {
 		}
 		$output .= '</select>';
 		$output .= self::$location_scope->generateNestedDDL( '', true );
+		$output .= OACBase::display_enso_selector();
 		$output .= '</div>';
 		$output .= '<div id="oac-output-panel" class="oac-output">';
 		$output .= self::tabs();
@@ -126,18 +127,24 @@ ENDTABS;
 	}
 
 	public static function output() {
-		self::$in_use = true;
 		$output = '<p>This is my output. There are many like it, but this one is mine.</p>';
 		$output .= self::ui_panel();
 		return $output;
 	}
 
-	public static function run_scripts() {
-		if( ! self::$in_use )
-			return;
-		
-		wp_register_script( 'oac_climaterisk', plugins_url( 'js/oac-climaterisk.js', __FILE__ ), array( 'jquery-ui-tabs' ) );
-		wp_print_scripts( 'oac_climaterisk' );
+	public static function hijack_header() {
+		global $post;
+		global $is_IE;
+		$regex = get_shortcode_regex();
+		preg_match('/'.$regex.'/s', $post->post_content, $matches);
+		if ((isset( $matches[2])) && ($matches[2] == 'oac_climaterisk')) {
+			wp_register_script( 'oac_climaterisk', plugins_url( 'js/oac-climaterisk.js', __FILE__ ),
+				array( 'jquery-ui-tabs', 'jqplot-base', 'jqplot-barrenderer', 'jqplot-categoryaxisrenderer', 'jqplot-canvasaxistickrenderer' )
+			);
+			wp_enqueue_script( 'oac_climaterisk' );
+			wp_enqueue_style( 'jquery-ui' );	
+			add_action( 'wp_head', array( 'OACBase', 'ie_conditionals' ), 3 );
+		}
 	}
 }
 
@@ -150,8 +157,10 @@ if( is_admin() ) {
 } else {
 	// Add front-end specific actions/hooks here
 	add_action( 'init', array( 'OACClimateRisk', 'initialize' ) );
+	add_action( 'template_redirect', array( 'OACClimateRisk', 'hijack_header' ) );
 	add_shortcode('oac_climaterisk', array( 'OACClimateRisk', 'output' ) );
-	add_action( 'wp_footer', array( 'OACClimateRisk', 'run_scripts' ) );
 }
 // Add all non-specific actions/hooks here
+//
+//
 ?>
