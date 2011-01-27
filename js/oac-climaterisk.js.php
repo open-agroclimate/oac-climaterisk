@@ -1,27 +1,57 @@
 <?php
 $handlerurl = substr( $_SERVER['PHP_SELF'], 0, strrpos( $_SERVER['PHP_SELF'], '/' ) );
 
-$js =  "var chart = new Array();";
-$js .= "jQuery(document).ready( function($) {\n";
+$js  = "jQuery(document).ready( function($) {\n";
 $js .= "\tclimateriskjshandlerurl = \"".$handlerurl."/../oac-climaterisk-ajax.php\";\n";
 $js .=<<< EOJS
+	// Setup our charts	
+	var charts = new Array();
+	charts[0] = new (function () {
+		this.containerId = 'avg-deviation-chart';
+		this.chartFun    = draw_graph_bar;
+		this.chart       = null;
+	})();
+	charts[1] = new (function() {
+		this.containerId = 'prob-dist-chart';
+		this.chartFun    = draw_graph_bar;
+		this.chart       = null;
+	})();
+	charts[2] = new (function() {
+		this.containerId = 'prob-exceed-chart';
+		this.chartFun    = draw_graph_bar;
+		this.chart       = null;
+	})();
+	charts[3] = new (function() {
+		this.containerId = 'five-year-chart';
+		this.chartFun    = draw_graph_bar;
+		this.chart       = null;
+	})();
 
-	//Initially on load, we only need to draw the first tab (laaazy load baby)
-	chart[0] = draw_graph_bar("avg-deviation-chart", [1,2,3,4,5,6,7,8,9,10,11,12], '#0000ff', ["Jan", "Feb", 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], 0);
-	chart[1] = draw_graph_bar("prob-dist-chart", [1,3,5,7,9,11,2,4,6,8,10,12], '#ff0000', [], 1);
-	chart[2] = draw_graph_bar("prob-exceed-chart", [12,11,10,9,8,7,6,5,4,3,2,1], '#0000ff', [], 2);
-	chart[3] = draw_graph_bar("five-year-chart", [10,11,12,9,8,7,6,1,2,3,4,5], '#0f0f0f', [], 0);
-
+	// Initialize the tabs
 	$("#tabs").tabs();
-	$(".current-var").html( getCurrentVar() );
-	$("#vartype").change( function() {
-		$(".current-var").html( getCurrentVar() );
-	});
-
+	
 	var userInput = $("#climaterisk-ui-container .oac-input");
 
+	// Climate Risk Chart generator function
 	userInput.queue( "cb-stack", function( next ) {
-		alert( "FIRE!" );
+		var scope = 'oac_scope_location';
+		var currentTab = $("#tabs").tabs( 'option', 'selected' );
+		$.ajax( {
+			url : climateriskjshandlerurl,
+			cache: false,	
+			dataType: 'json',
+			data: { route: 'avg',
+				vartype: $("#vartype").val(),
+				enso: $('input[name="ensophase"]:checked').val(),
+				tab: currentTab,
+				option: 'Average',
+				location: wpScoperGetFinal( scope )
+			},
+			success: function( json ) {
+				var graph = charts[currentTab];
+				graph.chart = graph.chartFun( graph.containerId, json.data, '#0f0f0f', ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"], 1 );
+			}
+		});
 		next();
 	});
 
@@ -32,7 +62,6 @@ $js .=<<< EOJS
 		}
 
 		if ( ( $(this).data('hasRun') == false ) || ( ( $(this).data('oac-climaterisk') == true ) && ( $(this).data('hasRun') == true ) ) ) {
-			alert( "Run from climaterisk" );
 			var tmpQueue = $.extend(true, [], $(this).queue( "cb-stack" ) );
 			$(this).dequeue( "cb-stack" );
 			$(this).queue( "cb-stack", tmpQueue );
@@ -43,8 +72,23 @@ $js .=<<< EOJS
 		}
 	});
 	
-	$("#tabs").bind('tabshow', function( event, ui ) {
-		chart[ui.index].redraw();
+	$("#tabs").bind('tabsshow', function( event, ui ) {
+		$.ajax( {
+			url : climateriskjshandlerurl,
+			cache: false,	
+			dataType: 'json',
+			data: { route: 'avg',
+				vartype: $("#vartype").val(),
+				enso: $('input[name="ensophase"]:checked').val(),
+				tab: ui.index,
+				location: wpScoperGetFinal( 'oac_scope_location' )
+			},
+			success: function( json ) {
+				var graph = charts[ui.index];
+				console.log( graph.containerId );
+				graph.chart = graph.chartFun( graph.containerId, json.data, '#0f0f0f', ["D"], 1 );
+			}
+		});
 	});
 });
 
