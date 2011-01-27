@@ -109,8 +109,7 @@ ENDTABS;
 	}
 
 	public static function output() {
-		$output = '<p>This is my output. There are many like it, but this one is mine.</p>';
-		$output .= self::ui_panel();
+		$output = self::ui_panel();
 		return $output;
 	}
 
