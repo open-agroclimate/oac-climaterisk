@@ -78,7 +78,7 @@ class OACClimateRisk {
 		$output .= '</div>';
 		$output .= '<div id="oac-output-panel" class="oac-output">';
 		$output .= self::tabs();
-		$output .= '</div>';
+		$output .= '</div></div>';
 		return $output;
 	}
 
@@ -91,17 +91,21 @@ class OACClimateRisk {
 				<li><a href="#tabs-3" style="font-size: .6em;">Probability of Exceedance</a></li>
 				<li><a href="#tabs-4" style="font-size: .6em;">Last 5 Years</a></li>
 			</ul>
-			<div id="tabs-1">
-				<div id="avg-deviation-chart" style="height: 300px; width: 500px;"></div>
+			<div id="tabs-1" style="font-size: .6em;">
+				<table id="avg-deviation-table"></table>
+				<div id="avg-deviation-chart" style="height: 300px; width: 600px;"></div>
 			</div>
-			<div id="tabs-2">
-				<div id="prob-dist-chart" style="height: 300px; width: 500px;"></div>
+			<div id="tabs-2" style="font-size: .6em;">
+				<table id="prob-dist-table"></table>
+				<div id="prob-dist-chart" style="height: 300px; width: 600px;"></div>
 			</div>
-			<div id="tabs-3">
-				<div id="prob-exceed-chart" style="height: 300px; width: 500px;"></div>
+			<div id="tabs-3" style="font-size: .6em;">
+				<table id="prob-exceed-table"></table>
+				<div id="prob-exceed-chart" style="height: 300px; width: 600px;"></div>
 			</div>
-			<div id="tabs-4">
-				<div id="five-year-chart" style="height: 300px; width: 500px;"></div>
+			<div id="tabs-4" style="font-size: .6em;">
+				<table id="five-year-table"></table>
+				<div id="five-year-chart" style="height: 300px; width: 600px;"></div>
 			</div>
 		</div>
 ENDTABS;
@@ -123,7 +127,7 @@ ENDTABS;
 			wp_enqueue_style ( 'jquery-ui' );
 			wp_enqueue_style ( 'jqplot' );
 			wp_register_script( 'oac_climaterisk', plugins_url( 'js/oac-climaterisk.js.php', __FILE__ ),
-				array( 'jquery-ui-tabs', 'jqplot-base', 'jqplot-barrenderer', 'jqplot-categoryaxisrenderer', 'jqplot-canvasaxistickrenderer' )
+				array( 'jquery-ui-tabs', 'jqplot-base', 'jqplot-barrenderer', 'jqplot-categoryaxisrenderer', 'jqplot-canvasaxistickrenderer', 'jqplot-canvastextrenderer', 'datatables-plugins', 'jqplot-pointlabels' )
 			);
 			wp_enqueue_script( 'oac_climaterisk' );
 			wp_enqueue_style( 'jquery-ui' );	
