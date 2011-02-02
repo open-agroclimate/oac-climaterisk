@@ -82,6 +82,10 @@ class OACClimateRisk {
 		return $output;
 	}
 
+	public static function month_table_header( $year = false ) {
+		return '<thead><tr><th id="vartype-index"></th><th>'.__('Jan').'</th><th>'.__('Feb').'</th><th>'.__('Mar').'</th><th>'.__('Apr').'</th><th>'.__('May').'</th><th>'.__('Jun').'</th><th>'.__('Jul').'</th><th>'.__('Aug').'</th><th>'.__('Sep').'</th><th>'.__('Oct').'</th><th>'.__('Nov').'</th><th>'.__('Dec').'</th>'.(( $year ) ? '<th>'.__('Year').'</th>' : '').'</tr></thead>';
+	}
+	
 	public static function tabs() {
 		$output = <<<ENDTABS
 		<div id="tabs">
@@ -92,19 +96,39 @@ class OACClimateRisk {
 				<li><a href="#tabs-4" style="font-size: .6em;">Last 5 Years</a></li>
 			</ul>
 			<div id="tabs-1" style="font-size: .6em;">
-				<table id="avg-deviation-table"></table>
+				<table id="avg-deviation-table">
+ENDTABS;
+		$output .= self::month_table_header( true );
+		$output .= '<tbody></tbody>';
+		$output .= <<<ENDTABS
+				</table>
 				<div id="avg-deviation-chart" style="height: 300px; width: 600px;"></div>
 			</div>
 			<div id="tabs-2" style="font-size: .6em;">
-				<table id="prob-dist-table"></table>
+				<table id="prob-dist-table">
+ENDTABS;
+		$output .= self::month_table_header();
+		$output .= '<tbody></tbody>';
+		$output .= <<<ENDTABS
+				</table>
 				<div id="prob-dist-chart" style="height: 300px; width: 600px;"></div>
 			</div>
 			<div id="tabs-3" style="font-size: .6em;">
-				<table id="prob-exceed-table"></table>
+				<table id="prob-exceed-table">
+ENDTABS;
+		$output .= self::month_table_header();
+		$output .= '<tbody></tbody>';
+		$output .= <<<ENDTABS
+				</table>
 				<div id="prob-exceed-chart" style="height: 300px; width: 600px;"></div>
 			</div>
 			<div id="tabs-4" style="font-size: .6em;">
-				<table id="five-year-table"></table>
+				<table id="five-year-table">
+ENDTABS;
+		$output .= self::month_table_header( true );
+		$output .= '<tbody></tbody>';
+		$output .= <<<ENDTABS
+				</table>
 				<div id="five-year-chart" style="height: 300px; width: 600px;"></div>
 			</div>
 		</div>
