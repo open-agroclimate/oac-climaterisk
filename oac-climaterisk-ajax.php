@@ -13,22 +13,22 @@ if( $_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest" ) {
 	if( isset( $_REQUEST['route'] ) ) {
 		switch( $_REQUEST['route'] ) {
 			case 'allData':
-				$etag = md5( print_r( $_REQUEST, true ) );
-				$data = array();
+				$html = array();
 				for( $i = 0; $i < 4; $i++ ) {
-					$data[] = OACClimateRiskAjax::fetchStats( $_REQUEST['vartype'], null, $i, $_REQUEST['location'] );
+					$html[] = OACClimateRiskAjax::fetchStats( $_REQUEST['vartype'], null, $i, $_REQUEST['location'] );
 				}
-				$json = json_encode( $data );
-				$seconds = 399600; // Approximately 4 days <-- SHOULD BE AN OACBase configuration option
-				header("Cache-Control: private, max-age={$seconds}");
-				header("Expires: ".gmdate('r', time()+$seconds));
+				
+				$json = json_encode( $html );
+				//$seconds = 120; //399600; // Approximately 4 days <-- SHOULD BE AN OACBase configuration option
+				//header("Cache-Control: private, max-age={$seconds}");
+				//header("Expires: ".gmdate('r', time()+$seconds));
 				echo $json;
 				break;
 			default:
 				if( ! isset( $_REQUEST['option'] ) ) {
 					$_REQUEST['option'] = null;
 				}
-				echo json_encode( array( 'data'=>OACClimateRiskAjax::fetchStats( $_REQUEST['vartype'], $_REQUEST['enso'], $_REQUEST['tab'], $_REQUEST['location'], $_REQUEST['option'] ) ) );
+				echo json_encode( array( OACClimateRiskAjax::fetchStats( $_REQUEST['vartype'], $_REQUEST['enso'], $_REQUEST['tab'], $_REQUEST['location'], $_REQUEST['option'] ) ) );
 				break;
 		}
 	}
@@ -68,8 +68,11 @@ class OACClimateRiskAjax {
 		}
 		$results = $wpdb->get_results( $wpdb->prepare( $query, $args ), ARRAY_A );
 		foreach( $results as $row ) {
+			$recalc_row = false;
+			$recalc = 0;
 			$enso  = $row['climateid'];
 			$rowindex = (string) $row['BIN'];
+			if( is_null( $row['YR']) && ( ($tab == 0) || ( $tab == 3 ) ) ) $recalc_row = true;
 			unset( $row['climatevariable'] );
 			unset( $row['BIN']);
 			unset( $row['Tab']);
@@ -79,6 +82,13 @@ class OACClimateRiskAjax {
 					$data[$enso][$rowindex][] = __("N/A");
 				} else {
 					$data[$enso][$rowindex][] = (float) $item;
+					if( $recalc_row ) $recalc += (float) $item;
+				}
+			}
+			if( $recalc_row ) {
+				if ($recalc > 0) {
+					array_pop($data[$enso][$rowindex]);
+					$data[$enso][$rowindex][] = ($recalc)."<sup>*</sup>";
 				}
 			}
 		}
@@ -106,17 +116,15 @@ class OACClimateRiskAjax {
 			$html[$enso] = '';
 			if( isset( $data[$enso] ) ) {
 				foreach( $data[$enso] as $rowIndex => $rowData ) {
-					$html[$enso] .= "<tr id=\"{$rowIndex}\"><td class=\"index_col\">{$rowIndex}</td>";				
+					$html[$enso] .= "<tr id=\"{$rowIndex}\"><td class=\"index-col\">{$rowIndex}</td>";				
 					for( $i = 0; $i < count( $rowData ); $i++ ) {
-						$html[$enso] .= '<td class="col_'.$i.'">'.$rowData[$i].'</td>';
+						$html[$enso] .= '<td class="col-'.$i.'">'.$rowData[$i].'</td>';
 					}
 					$html[$enso] .= "</tr>";
 				}
 			}
 		}
-		
-		$data = array('data'=>$data, 'html'=>$html);
-		return $data;
+		return $html;
 	}
 }
 
