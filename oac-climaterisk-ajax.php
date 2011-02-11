@@ -19,9 +19,9 @@ if( $_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest" ) {
 				}
 				
 				$json = json_encode( $html );
-				//$seconds = 120; //399600; // Approximately 4 days <-- SHOULD BE AN OACBase configuration option
-				//header("Cache-Control: private, max-age={$seconds}");
-				//header("Expires: ".gmdate('r', time()+$seconds));
+				$seconds = 120; //399600; // Approximately 4 days <-- SHOULD BE AN OACBase configuration option
+				header("Cache-Control: private, max-age={$seconds}");
+				header("Expires: ".gmdate('r', time()+$seconds));
 				echo $json;
 				break;
 			default:
@@ -72,7 +72,6 @@ class OACClimateRiskAjax {
 			$recalc = 0;
 			$enso  = $row['climateid'];
 			$rowindex = (string) $row['BIN'];
-			if( is_null( $row['YR']) && ( ($tab == 0) || ( $tab == 3 ) ) ) $recalc_row = true;
 			unset( $row['climatevariable'] );
 			unset( $row['BIN']);
 			unset( $row['Tab']);
@@ -82,13 +81,6 @@ class OACClimateRiskAjax {
 					$data[$enso][$rowindex][] = __("N/A");
 				} else {
 					$data[$enso][$rowindex][] = (float) $item;
-					if( $recalc_row ) $recalc += (float) $item;
-				}
-			}
-			if( $recalc_row ) {
-				if ($recalc > 0) {
-					array_pop($data[$enso][$rowindex]);
-					$data[$enso][$rowindex][] = ($recalc)."<sup>*</sup>";
 				}
 			}
 		}
