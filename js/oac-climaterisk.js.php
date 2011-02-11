@@ -92,8 +92,8 @@ $js .=<<< EOJS
 			fout = function() {
 				var point = this.bar || this || undefined;
 				if( point === undefined ) return;
-				this.flag.animate({opacity:0}, 300, function() {this.remove(); });
-				graphobj.labels[this.index].animate({"fill-opacity": 0.25, "font-weight" : "normal"}, 300, function(){});
+				this.flag.remove();
+				graphobj.labels[this.index].attr({"fill-opacity": 0.25, "font-weight" : "normal"});
 				graphobj.labels[this.index].toBack();
 			},
 			cleaned,
@@ -131,7 +131,7 @@ $js .=<<< EOJS
 			canvases[tab] = {canvas : Raphael($(graph).attr("id"), 600, 300 ), redraw: false };
 		}
 		canvases[tab].canvas.clear();
-		if( data.length === 0 ) {
+		if( data.length === (cleaned.invalid.length-1) ) {
 			canvases[tab].canvas.text(300,150, "Data unavailable");
 		} else {
 			graphobj = oac().chartWithAxis(($.isArray(climateriskHandlers[tab].graphCallback)) ? climateriskHandlers[tab].graphCallback[index] : climateriskHandlers[tab].graphCallback, canvases[tab].canvas, 0, 0, 600, 300, data, label, { title: gtitle, xlabel: xlabel, ylabel: "", yunits: units }, opts, {"fill-opacity" : .25, "font-weight" : "normal" } );
