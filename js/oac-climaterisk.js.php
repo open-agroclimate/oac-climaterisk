@@ -7,12 +7,13 @@ $js .=<<< EOJS
 
 	// Remove input[name="ensophase"] from oac-input (not needed here)
 	$("#climaterisk-ui-container input[name=\\"ensophase\\"]").removeClass('oac-input');
-	var climateriskUserInput = $("#climaterisk-ui-container .oac-input");
-	var climateriskDataSet;
-	var currentMonthIndex = new Date();
+	var climateriskUserInput = $("#climaterisk-ui-container .oac-input"),
+	    currentMonthIndex = new Date(),
+		climateriskHandlers = [],
+		canvases = [],
+		climateriskDataSet;
+	
 	currentMonthIndex = currentMonthIndex.getMonth();
-	var climateriskHandlers = [],
-		canvases = [];
 	climateriskHandlers[0] = { 'tableCallback': oac().highlightTableRow, 'defaultSelection': 0, 'graphCallback': [oac().barchart, oac().deviationbarchart] };
 	climateriskHandlers[1] = { 'tableCallback': oac().highlightTableCol, 'defaultSelection': currentMonthIndex+1, 'graphCallback':oac().barchart };
 	climateriskHandlers[2] = { 'tableCallback': oac().highlightTableCol, 'defaultSelection': currentMonthIndex+1, 'graphCallback':oac().linechart };
@@ -83,7 +84,8 @@ $js .=<<< EOJS
 			fin = function() {
 				var point = this.bar || this || undefined;
 				if ( point === undefined ) return;
-				this.flag = canvases[tab].canvas.g.popup( point.x, point.y, ( overlayData === undefined ) ? ((point.value || "0")+" "+units) : (colIndex+": "+(point.value || "0")+" "+units+"\\n"+selectedEnso+" Avg: "+(overlayData[this.index] || "0")+" "+units), tab !== 3 ? undefined : this.index < 6 ? 3 : 1 ).insertBefore(this).toFront();
+				if( $.inArray( this.index+1, cleaned.invalid) !== -1 ) { point.value = undefined; }
+				this.flag = canvases[tab].canvas.g.popup( point.x, point.y, ( overlayData === undefined ) ? ((point.value || "N/A")+" "+units) : (point.value === undefined) ? (graphobj.labels[this.index].attr().text+" "+colIndex+": N/A\\n"+selectedEnso+" Avg: "+(overlayData[this.index] || "0")+" "+units) : (graphobj.labels[this.index].attr().text+" "+colIndex+": "+(point.value || "N/A")+" "+units+"\\n"+selectedEnso+" Avg: "+(overlayData[this.index] || "0")+" "+(units || '')), ((tab !== 3) || ( point.value === undefined)) ? undefined : this.index < 6 ? 3 : 1 ).insertBefore(this).toFront();
 				graphobj.labels[this.index].attr({"fill-opacity": 1, "font-weight" : "bold"});
 				graphobj.labels[this.index].toFront();
 			},
@@ -95,15 +97,16 @@ $js .=<<< EOJS
 				graphobj.labels[this.index].toBack();
 			},
 			cleaned,
+			invalid,
 			units,
 			graphobj,
 			overlay,
 			overlayData;
 		
 		// Cleanup Aisle One
-		cleaned = oac().cleanData( data, label );
+		cleaned = oac().cleanData( data );
 		data = cleaned.data;
-		label = cleaned.labels;
+		invalid = cleaned.invalid;
 		gtitle = title.substring(0, title.indexOf('('));
 		if( tab == 0 || tab == 3 ) {
 			xlabel = "Months"; // needs translations
@@ -135,9 +138,12 @@ $js .=<<< EOJS
 			if( tab == 3 ) {
 				var graphbb = graphobj.graph.bars.getBBox(),
 				    overlayTable = $("#climaterisk-ui-container #avg-deviation-table tbody tr:eq(0) td");
-				overlayData = (function() { var x = []; overlayTable.each( function() { x.push($(this).text()); }); return x; })();
-				overlayData = overlayData.slice(1, overlayData.length-1);
-				overlay = oac().linechart(canvases[tab].canvas, graphbb.x+5, graphbb.y+5, graphbb.width-11, graphbb.height+3, overlayData, undefined, {from: 0, to: Math.max.apply(null, data)-2, shade: false, colors: $("#climaterisk-ui-container #tabs table:eq(0) .highlight").css('background-color') }, {noaxis: true} );
+				overlayData = (function() { var x = []; overlayTable.each( function() { x.push($(this).text()); }); return x; })()
+				overlayData = overlayData.slice(1);
+				if (overlayData.length > 12 ) {
+					overlayData.pop();
+				}
+				overlay = oac().linechart(canvases[tab].canvas, graphobj.x+(opts.gutter || 20)+graphobj.overlayxoffset, graphobj.y+(opts.vgutter || 20) , graphobj.width-((opts.gutter || 20)*2)-(graphobj.overlayxoffset*2), graphobj.height-(opts.vgutter || 20)*2, overlayData, undefined, {from: 0, to: Math.max.apply(null, data), shade: false, colors: $("#climaterisk-ui-container #tabs table:eq(0) .highlight").css('background-color') }, {noaxis: true} );
 			}
 			graphobj.graph.hover(fin, fout);
 		}
@@ -186,7 +192,9 @@ $js .=<<< EOJS
 				enso = 4;
 			}
 			climateriskHandlers[tableIndex].tableCallback( this, enso );
-			climateriskDrawGraph( tableIndex, enso, { type: "soft", colors: $(this).parents('table').find('.highlight').css('background-color') } );
+			if( $("#tabs").tabs('option', 'selected') === tableIndex ) {
+				climateriskDrawGraph( tableIndex, enso, { type: "soft", colors: $(this).parents('table').find('.highlight').css('background-color') } );
+			}
 	});
 
 	$("#tabs").bind( 'tabsshow', function( event, ui ) {
@@ -199,7 +207,7 @@ $js .=<<< EOJS
 	$("#tabs").tabs();
 	climateriskDataSet = loadClimateRiskData( $("#vartype").val(), wpScoperGetFinal( 'oac_scope_location' ) );
 	climateriskDrawTables( $("#climaterisk-ui-container #enso-select input[name=\"ensophase\"]:checked").val() );
-	climateriskDrawGraph(  $("#climaterisk-ui-container #tabs").tabs('option', 'selected'), $("#climaterisk-ui-container #enso-select input[name=\"ensophase\"]:checked").val(), { type: "soft", colors: $("#climaterisk-ui-container #tabs table:eq("+$("#climaterisk-ui-container #tabs").tabs('option', 'selected')+") .highlight").css('background-color') } );
+	//climateriskDrawGraph(  $("#climaterisk-ui-container #tabs").tabs('option', 'selected'), $("#climaterisk-ui-container #enso-select input[name=\"ensophase\"]:checked").val(), { type: "soft", colors: $("#climaterisk-ui-container #tabs table:eq("+$("#climaterisk-ui-container #tabs").tabs('option', 'selected')+") .highlight").css('background-color') } );
 });
 EOJS;
 header( 'Content-type: text/javascript');
