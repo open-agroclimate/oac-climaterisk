@@ -37,12 +37,12 @@ class OACClimateRiskAdmin {
 
 
 	public function oac_climaterisk_install_harness() {
-		OACBase::oac_base_init();
+		OACBase::init();
 		wp_scoper_admin_setup_scopes( 'location', __FILE__ );
 	}
 
 	public function oac_climaterisk_uninstall_harness() {
-		OACBase::oac_base_init();
+		OACBase::init();
 		wp_scoper_admin_cleanup_scopes( __FILE__ );
 	}
 } // class OACClimateRiskAdmin
@@ -52,7 +52,7 @@ class OACClimateRisk {
 	private static $plugin_url = '';
 
 	public static function initialize() {
-		OACBase::oac_base_init();
+		OACBase::init();
 		self::$location_scope = new WPScoper( 'location' );
 	}
 
@@ -60,13 +60,15 @@ class OACClimateRisk {
 	public static function ui_panel()  {
 		$output =  '<div id="climaterisk-ui-container" class="oac-ui-container">';
 		$output .= '<div id="oac-user-input-panel" class="oac-user-input">';
+		$len_unit = OACBase::get_unit('', 'smalllen' );
+		$temp_unit = OACBase::get_unit( '', 'temp');
 		// Generate a DDL for variable type
 		$ddl = array(
-			'RAIN' => __( 'Total Rainfall (in.)' ), 
-			'TMIN' => __( 'Average Min. Temp (&#176;F)' ),
-			'TMAX' => __( 'Average Max. Temp (&#176;F)' ), 
-			'NABS' => __( 'Monthly Min. Temp (&#176;F)' ),
-			'XABS' => __( 'Monthly Max. Temp (&#176;F)' ));
+			'RAIN' => __( 'Total Rainfall' ).' ('.$len_unit['abbr'].")", 
+			'TMIN' => __( 'Average Min. Temp' ).' ('.$temp_unit['abbr'].')',
+			'TMAX' => __( 'Average Max. Temp' ).' ('.$temp_unit['abbr'].')', 
+			'NABS' => __( 'Monthly Min. Temp' ).' ('.$temp_unit['abbr'].')',
+			'XABS' => __( 'Monthly Max. Temp' ).' ('.$temp_unit['abbr'].')');
 		$output .= '<label for="vartype">Variable Type</label>';
 		$output .= '<select name="vartype" id="vartype" class="oac-input oac-select">';
 		foreach( $ddl as $option_val => $option_display ) {
