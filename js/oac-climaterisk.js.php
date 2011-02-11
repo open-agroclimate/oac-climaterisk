@@ -71,6 +71,7 @@ $js .=<<< EOJS
 		}
 		
 		var isCol = ( tab == 1 || tab == 2 ) ? true : false,
+			selectedEnso = $("#climaterisk-ui-container #enso-select input[name=\"ensophase\"]:checked").parent().text(),
 			panel = $("#tabs").children("div:eq("+tab+")"),
 			table = $(panel).find(".oac-table tbody"),
 			index = oac().tableHighlightedIndices([$(table)]),
@@ -82,7 +83,7 @@ $js .=<<< EOJS
 			fin = function() {
 				var point = this.bar || this || undefined;
 				if ( point === undefined ) return;
-				this.flag = canvases[tab].canvas.g.popup( point.x, point.y, (point.value || "0")+" "+units).insertBefore(this);
+				this.flag = canvases[tab].canvas.g.popup( point.x, point.y, ( overlayData === undefined ) ? ((point.value || "0")+" "+units) : (colIndex+": "+(point.value || "0")+" "+units+"\\n"+selectedEnso+" Avg: "+(overlayData[this.index] || "0")+" "+units), tab !== 3 ? undefined : this.index < 6 ? 3 : 1 ).insertBefore(this).toFront();
 				graphobj.labels[this.index].attr({"fill-opacity": 1, "font-weight" : "bold"});
 				graphobj.labels[this.index].toFront();
 			},
@@ -95,20 +96,23 @@ $js .=<<< EOJS
 			},
 			cleaned,
 			units,
-			graphobj;
+			graphobj,
+			overlay,
+			overlayData;
 		
 		// Cleanup Aisle One
 		cleaned = oac().cleanData( data, label );
 		data = cleaned.data;
 		label = cleaned.labels;
-		title = title.substring(0, title.indexOf('('));
+		gtitle = title.substring(0, title.indexOf('('));
 		if( tab == 0 || tab == 3 ) {
 			xlabel = "Months"; // needs translations
-			title += "("+colIndex+")";
-			units = "mm";
+			gtitle += "("+colIndex+")";
+			units = title.substring(title.indexOf('(')+1, title.indexOf(')'));
 		} else {
-			xlabel = "Millimeters"; // needs translation
-			title += "("+$(table).parent().find("thead th:eq("+index+")").text()+")";
+			xlabel = title.substring(title.lastIndexOf(' ', title.lastIndexOf(' ')-1));
+			//xlabel = "Millimeters"; // needs translation
+			gtitle += "("+$(table).parent().find("thead th:eq("+index+")").text()+")";
 			units = "%";
 		}
 		
@@ -127,7 +131,14 @@ $js .=<<< EOJS
 		if( data.length === 0 ) {
 			canvases[tab].canvas.text(300,150, "Data unavailable");
 		} else {
-			graphobj = oac().chartWithAxis(($.isArray(climateriskHandlers[tab].graphCallback)) ? climateriskHandlers[tab].graphCallback[index] : climateriskHandlers[tab].graphCallback, canvases[tab].canvas, 0, 0, 600, 300, data, label, { title: title, xlabel: xlabel, ylabel: "", yunits: units }, opts, {"fill-opacity" : .25, "font-weight" : "normal" } );
+			graphobj = oac().chartWithAxis(($.isArray(climateriskHandlers[tab].graphCallback)) ? climateriskHandlers[tab].graphCallback[index] : climateriskHandlers[tab].graphCallback, canvases[tab].canvas, 0, 0, 600, 300, data, label, { title: gtitle, xlabel: xlabel, ylabel: "", yunits: units }, opts, {"fill-opacity" : .25, "font-weight" : "normal" } );
+			if( tab == 3 ) {
+				var graphbb = graphobj.graph.bars.getBBox(),
+				    overlayTable = $("#climaterisk-ui-container #avg-deviation-table tbody tr:eq(0) td");
+				overlayData = (function() { var x = []; overlayTable.each( function() { x.push($(this).text()); }); return x; })();
+				overlayData = overlayData.slice(1, overlayData.length-1);
+				overlay = oac().linechart(canvases[tab].canvas, graphbb.x+5, graphbb.y+5, graphbb.width-11, graphbb.height+3, overlayData, undefined, {from: 0, to: Math.max.apply(null, data)-2, shade: false, colors: $("#climaterisk-ui-container #tabs table:eq(0) .highlight").css('background-color') }, {noaxis: true} );
+			}
 			graphobj.graph.hover(fin, fout);
 		}
 	}
@@ -145,7 +156,6 @@ $js .=<<< EOJS
 		climateriskDataSet = loadClimateRiskData( $("#vartype").val(), wpScoperGetFinal( 'oac_scope_location' ) );
 		climateriskDrawTables( $("#climaterisk-ui-container #enso-select input[name=\"ensophase\"]:checked").val(), oac().tableHighlightedIndices( $("#climaterisk-ui-container #tabs").find(".oac-table tbody") ) );
 		climateriskDrawGraph( tab, $("#climaterisk-ui-container #enso-select input[name=\"ensophase\"]:checked").val(), { type: "soft", colors: ensoColor } );
-
 		next();
 	});
 
