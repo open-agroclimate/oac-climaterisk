@@ -116,7 +116,32 @@ class OACClimateRiskAjax {
 				}
 			}
 		}
-		return $html;
+		
+		// Rough units work
+		$len_units = OACBase::get_unit( '', 'smalllen' );
+		$temp_units = OACBase::get_unit( '', 'temp' );
+		
+		$xlabel = $ylabel = $yunits = '';
+		if( ( $tab == 0 ) || ( $tab == 3 ) ) {
+			$xlabel = __('Month');
+			if( $vartype == 'RAIN' ) {
+				$yunits = $len_units['abbr'];
+				$ylabel = __('Rainfall').' ('.$yunits.')';
+			} else {
+				$yunits = "°".substr( $temp_units['abbr'], -1);
+				$ylabel = __('Temperature').'  ('.$yunits.')';
+			}
+		} else {
+			$yunits = '%';
+			$ylabel = __('Probability').' (%)';
+			if( $vartype == 'RAIN' ) {
+				$xlabel = __('Rainfall').' ('.$len_units['abbr'].')';
+			} else {
+				$xunits = "°".substr( $temp_units['abbr'], -1);
+				$xlabel = __('Temperature').'  ('.$xunits.')';
+			}
+		}
+		return array('table' => $html, 'xlabel' => $xlabel, 'ylabel'=>$ylabel, 'yunits'=>$yunits);
 	}
 }
 

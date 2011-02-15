@@ -56,7 +56,7 @@ $js .=<<< EOJS
 			if( tab == 3 ) {
 				enso = 4;
 			}
-			oac().drawTable( tables[tab], climateriskDataSet[tab][enso] );
+			oac().drawTable( tables[tab], climateriskDataSet[tab]['table'][enso] );
 			// load from the defaults above
 			if( selectedIndices === undefined ) {
 				climateriskIndexSelect( tables[tab], climateriskHandlers[tab].defaultSelection, tab );
@@ -73,14 +73,17 @@ $js .=<<< EOJS
 		
 		var isCol = ( tab == 1 || tab == 2 ) ? true : false,
 			selectedEnso = $("#climaterisk-ui-container #enso-select input[name=\"ensophase\"]:checked").parent().text(),
-			panel = $("#tabs").children("div:eq("+tab+")"),
-			table = $(panel).find(".oac-table tbody"),
-			index = oac().tableHighlightedIndices([$(table)]),
-			colIndex = isCol ? index-1 : $(table).find("tr:eq("+index+") .index-col").text(),
-			label = isCol ? (function() { var x = []; $(table).find(".index-col").each( function() { x.push($(this).text()); }); return x; })() : (function() { var x=[]; $(table).parent().find("thead th").each( function() { x.push($(this).text()); }); x.shift(); return x; })(),
-			data  = isCol ? oac().getHighlightedData( table ) : oac().getHighlightedData( table ).slice(1),
-			graph = $(panel).find(".oac-chart"),
-			title = $("#climaterisk-ui-container").find("#vartype :selected").text(),
+			panel        = $("#tabs").children("div:eq("+tab+")"),
+			table        = $(panel).find(".oac-table tbody"),
+			index        = oac().tableHighlightedIndices([$(table)]),
+			colIndex     = isCol ? index-1 : $(table).find("tr:eq("+index+") .index-col").text(),
+			label        = isCol ? (function() { var x = []; $(table).find(".index-col").each( function() { x.push($(this).text()); }); return x; })() : (function() { var x=[]; $(table).parent().find("thead th").each( function() { x.push($(this).text()); }); x.shift(); return x; })(),
+			data         = isCol ? oac().getHighlightedData( table ) : oac().getHighlightedData( table ).slice(1),
+			graph        = $(panel).find(".oac-chart"),
+			title        = $("#climaterisk-ui-container").find("#vartype :selected").text(),
+			xlabel       = climateriskDataSet[tab]['xlabel'],
+			ylabel       = climateriskDataSet[tab]['ylabel'],
+			units        = climateriskDataSet[tab]['yunits'],
 			fin = function() {
 				var point = this.bar || this || undefined;
 				if ( point === undefined ) return;
@@ -98,7 +101,6 @@ $js .=<<< EOJS
 			},
 			cleaned,
 			invalid,
-			units,
 			graphobj,
 			overlay,
 			overlayData;
@@ -108,19 +110,7 @@ $js .=<<< EOJS
 		data = cleaned.data;
 		invalid = cleaned.invalid;
 		gtitle = title.substring(0, title.indexOf('('));
-		if( tab == 0 || tab == 3 ) {
-			xlabel = "Months"; // needs translations
-			gtitle += "("+colIndex+")";
-			units = title.substring(title.indexOf('(')+1, title.indexOf(')'));
-		} else {
-			xlabel = title.substring(title.lastIndexOf(' ', title.lastIndexOf(' ')-1));
-			//xlabel = "Millimeters"; // needs translation
-			gtitle += "("+$(table).parent().find("thead th:eq("+index+")").text()+")";
-			units = "%";
-		}
-		
-		//if( tab == 1 || tab == 2) { return; }
-		
+				
 		if( climateriskHandlers[tab].tableCallback === oac().highlightTableRow ) {
 			if (data.length > 12 ) {
 				data.pop();
@@ -134,7 +124,7 @@ $js .=<<< EOJS
 		if( data.length === (cleaned.invalid.length-1) ) {
 			canvases[tab].canvas.text(300,150, "Data unavailable");
 		} else {
-			graphobj = oac().chartWithAxis(($.isArray(climateriskHandlers[tab].graphCallback)) ? climateriskHandlers[tab].graphCallback[index] : climateriskHandlers[tab].graphCallback, canvases[tab].canvas, 0, 0, 600, 300, data, label, { title: gtitle, xlabel: xlabel, ylabel: "", yunits: units }, opts, {"fill-opacity" : .25, "font-weight" : "normal" } );
+			graphobj = oac().chartWithAxis(($.isArray(climateriskHandlers[tab].graphCallback)) ? climateriskHandlers[tab].graphCallback[index] : climateriskHandlers[tab].graphCallback, canvases[tab].canvas, 0, 0, 600, 300, data, label, { title: gtitle, xlabel: xlabel, ylabel: ylabel }, opts, {"fill-opacity" : .25, "font-weight" : "normal" } );
 			if( tab == 3 ) {
 				var graphbb = graphobj.graph.bars.getBBox(),
 				    overlayTable = $("#climaterisk-ui-container #avg-deviation-table tbody tr:eq(0) td");
@@ -207,7 +197,6 @@ $js .=<<< EOJS
 	$("#tabs").tabs();
 	climateriskDataSet = loadClimateRiskData( $("#vartype").val(), wpScoperGetFinal( 'oac_scope_location' ) );
 	climateriskDrawTables( $("#climaterisk-ui-container #enso-select input[name=\"ensophase\"]:checked").val() );
-	//climateriskDrawGraph(  $("#climaterisk-ui-container #tabs").tabs('option', 'selected'), $("#climaterisk-ui-container #enso-select input[name=\"ensophase\"]:checked").val(), { type: "soft", colors: $("#climaterisk-ui-container #tabs table:eq("+$("#climaterisk-ui-container #tabs").tabs('option', 'selected')+") .highlight").css('background-color') } );
 });
 EOJS;
 header( 'Content-type: text/javascript');
