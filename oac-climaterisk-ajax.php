@@ -9,6 +9,7 @@ if( file_exists( $wp_root.'wp-load.php' ) ) {
 }
 
 // Are you a proper ajax call?
+if( ! isset( $_SERVER['HTTP_X_REQUESTED_WITH']) ) { die( "<img src=\"./kp.jpg\"><p>Bad kitty. No ponies for you!</p>" ); }
 if( $_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest" ) {
 	if( isset( $_REQUEST['route'] ) ) {
 		switch( $_REQUEST['route'] ) {
@@ -62,20 +63,24 @@ class OACClimateRiskAjax {
 		}
 		$query .= " AND (`location_py`.`oac_scope_location_id` = %s)";
 		$args[] = $location;
+		$results = $wpdb->get_results( $wpdb->prepare( $query, $args ), ARRAY_A );
 		$sort = true;	
 		if( $tab == 0 ) {
 			$sort = false;
 		}
-		$results = $wpdb->get_results( $wpdb->prepare( $query, $args ), ARRAY_A );
 		foreach( $results as $row ) {
 			$recalc_row = false;
 			$recalc = 0;
-			$enso  = $row['climateid'];
+			$enso  = intval($row['climateid'])-1;
+			if($tab == 3) {
+				$enso = 0;
+			}
 			$rowindex = (string) $row['BIN'];
 			unset( $row['climatevariable'] );
 			unset( $row['BIN']);
 			unset( $row['Tab']);
 			unset( $row['climateid']);
+			$data[$enso][$rowindex][] = $rowindex;
 			foreach( $row as $item ) {
 				if( is_null( $item ) ) {
 					$data[$enso][$rowindex][] = __("N/A");
@@ -85,13 +90,14 @@ class OACClimateRiskAjax {
 			}
 		}
 
+		$el = count($data);
 		if( $sort ) {
 			$sortFunc = 'knsort';
 			if( $tab == 3 ) {
 				$sortFunc = 'knrsort';
 			}
 			$tempData = null;
-			for( $enso = 1; $enso < 5; $enso++ ) {
+			for( $enso = 0; $enso < $el; $enso++ ) {
 				if( isset( $data[$enso] )) {
 					$data[$enso] = call_user_func( array( 'OACBase', $sortFunc ), $data[$enso]) ;
 					if( isset( $data[$enso]['More'] ) ) {
@@ -102,21 +108,12 @@ class OACClimateRiskAjax {
 				}
 			}
 		}
-	
-		$html = array();
-		for( $enso = 1; $enso < 5; $enso++ ) {
-			$html[$enso] = '';
-			if( isset( $data[$enso] ) ) {
-				foreach( $data[$enso] as $rowIndex => $rowData ) {
-					$html[$enso] .= "<tr id=\"{$rowIndex}\"><td class=\"index-col\">{$rowIndex}</td>";				
-					for( $i = 0; $i < count( $rowData ); $i++ ) {
-						$html[$enso] .= '<td class="col-'.$i.'">'.$rowData[$i].'</td>';
-					}
-					$html[$enso] .= "</tr>";
-				}
-			}
+		
+		for( $enso = 0; $enso < $el; $enso++ ) {
+			$data[$enso] = array_values($data[$enso]);
 		}
 		
+
 		// Rough units work
 		$len_units = OACBase::get_unit( '', 'smalllen' );
 		$temp_units = OACBase::get_unit( '', 'temp' );
@@ -141,7 +138,7 @@ class OACClimateRiskAjax {
 				$xlabel = __('Temperature').'  ('.$xunits.')';
 			}
 		}
-		return array('table' => $html, 'xlabel' => $xlabel, 'ylabel'=>$ylabel, 'yunits'=>$yunits);
+		return array('data' => $data, 'xlabel' => $xlabel, 'ylabel'=>$ylabel, 'yunits'=>$yunits);
 	}
 }
 

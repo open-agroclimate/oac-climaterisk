@@ -149,15 +149,11 @@ ENDTABS;
 		$regex = get_shortcode_regex();
 		preg_match('/'.$regex.'/s', $post->post_content, $matches);
 		if ((isset( $matches[2])) && ($matches[2] == 'oac_climaterisk')) {
-			wp_enqueue_script( 'wp-scoper' );
-			wp_enqueue_style ( 'jquery-ui' );
-			wp_enqueue_style ( 'jqplot' );
 			wp_enqueue_style ( 'oacbase' );
-			wp_register_script( 'oac_climaterisk', plugins_url( 'js/oac-climaterisk.js.php', __FILE__ ),
-				array( 'jquery-ui-tabs', 'grbar', 'grline', 'oaclib' )
+			wp_register_script( 'oac_climaterisk', plugins_url( 'js/oac-climaterisk.js', __FILE__ ),
+				array( 'oac-base', 'mootools-array-math' )
 			);
 			wp_enqueue_script( 'oac_climaterisk' );
-			wp_enqueue_style( 'jquery-ui' );	
 			add_action( 'wp_head', array( 'OACBase', 'ie_conditionals' ), 3 );
 		}
 	}
