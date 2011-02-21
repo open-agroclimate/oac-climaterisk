@@ -7,6 +7,7 @@ var OACClimateRisk = new Class({
 		defaultSelect: []
 	},
 	data:   [],
+	tabledata: [],
 	axis:   [],
 	labels: [],
 	initialize: function(opts, scope) {
@@ -31,28 +32,49 @@ var OACClimateRisk = new Class({
 				this.req.send({
 					data: {
 						route: 'allData',
-						vartype: 'RAIN',
+						vartype: this.options.element.getElement('#vartype').get('value'),
 						location: this.scope.finalElement.get('value')
 					}
 				});
+			}.bind(this),
+			clickRow: function(row) {
+				var table = row.getParents('table')[0],
+					tableindex = this.options.element.getElements('table').indexOf(table),
+					rowindex = row.getParent().getChildren('tr').indexOf(row),
+					enso = this.enso-1;
+				if( tableindex === 3 ) enso = 0;
+				this.drawGraph(this.data[tableindex][enso][rowindex], tableindex);
+			}.bind(this),
+			clickCol: function(colindex, col) {
+				var table = col[0].getParents('table')[0],
+				    tableindex = this.options.element.getElements('table').indexOf(table),
+					enso = this.enso-1;
+				this.drawGraph(this.data[tableindex][enso][colindex-1]);
 			}.bind(this)
 		};
+		this.tables.each(function(table, index) {
+			var rowtable = ((index === 0) || (index === 3)),
+			    t = new HtmlTable(table, {
+					selectable: rowtable,
+					columnSelectable: !rowtable,
+					hasIndexColumn: true,
+					onRowFocus: this.bound.clickRow,
+					onColFocus: this.bound.clickCol
+			    });
+			this.tables[index] = t;
+		}, this);
 		// First bind our custom events to the scope
 		this.scope.finalQueue.add(this.bound.req);
+		this.bound.req();
 	},
 	
 	processData: function(data) {
 		data.each(function(item, index) {
-			var rowtable = ((index === 0) || (index === 3)),
-			    table, enso;
-			this.tables[index].getElement('tbody').empty();
 			this.axis[index] = Object.filter(item, function( v, k ) { 
 				return typeOf(v) === 'string';
 			});
 			this.data[index] = Array.clone(item.data);
-			enso = Number.from(this.enso)-1;
-			if(index === 3) enso = 0;
-			table = new HtmlTable(this.tables[index], {rows: item.data[enso], selectable : rowtable});
+			this.tabledata[index] = Array.clone(item.data);
 			item.data.each( function( itm, idx ) {
 				itm.each( function( it, id ) {
 					this.data[index][idx][id] = it.slice(1, (((index == 0) || (index == 3)) ? it.length-1 : undefined));
@@ -62,6 +84,23 @@ var OACClimateRisk = new Class({
 				}
 			}, this);
 		}, this);
+		this.genTables();
+	},
+	
+	genTables: function() {
+		// First get all the tables available (on the tabs)
+		var enso = Number.from(this.enso)-1;
+		this.tables.each(function( table, index ) {
+			if(index === 3) enso = 0;
+			this.tabledata[index][enso].each(function(row, i) { table.push(row); });
+			table.toElement().addClass('oac-enso-'+this.enso);
+		}, this);
+	},
+	
+	drawGraph: function(data, tabindex) {
+		// First we have to get the proper labels and then merge the two (label,data)
+		// tabindex determines the type of graph we are drawing
+		console.log(data);
 	}
 });
 
