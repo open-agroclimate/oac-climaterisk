@@ -138,6 +138,7 @@ class OACClimateRiskAjax {
 				$xlabel = __('Temperature').'  ('.$xunits.')';
 			}
 		}
+		
 		return array('data' => $data, 'xlabel' => $xlabel, 'ylabel'=>$ylabel, 'yunits'=>$yunits);
 	}
 }

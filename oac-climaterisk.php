@@ -151,7 +151,7 @@ ENDTABS;
 		if ((isset( $matches[2])) && ($matches[2] == 'oac_climaterisk')) {
 			wp_enqueue_style ( 'oacbase' );
 			wp_register_script( 'oac_climaterisk', plugins_url( 'js/oac-climaterisk.js', __FILE__ ),
-				array( 'oac-base', 'mootools-array-math', 'mootools-table-colsel' )
+				array( 'oac-base', 'mootools-array-math', 'mootools-table-colsel', 'grbar' )
 			);
 			wp_enqueue_script( 'oac_climaterisk' );
 			add_action( 'wp_head', array( 'OACBase', 'ie_conditionals' ), 3 );
