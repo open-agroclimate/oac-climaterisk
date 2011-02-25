@@ -158,6 +158,7 @@ var OACClimateRisk = new Class({
 				element: this.graphs[tabindex],
 				min: min,
 				max: max,
+				type: (tabindex == 2 ) ? 'linechart' : 'barchart',
 				labels: labels,
 				graphOptions: {
 					title: 'Example '+tabindex,
@@ -168,7 +169,9 @@ var OACClimateRisk = new Class({
 					colors: (tabindex === 3) ? ['#808080'] : this.graphcolor,
 					centeraxis: (tabindex === 0),
     				to: max,
-    				from: min > 0 ? 0 : min 
+    				from: min > 0 ? 0 : min,
+    				shade: true,
+    				symbol: 'o'
 				}
 			});
 		}
@@ -192,7 +195,8 @@ var OACClimateRisk = new Class({
 		if(labels.length === 0) labels = currentgraph.options.labels;
 		// now we clean and do more label work;
 		data = data.intelclean(0);
-		data = data.data;		
+		data = data.data;
+		console.log(data);
 		if(currentgraph.rescale) {
 		    currentgraph.options.labels = labels;
 		    currentgraph.options.min = min;
