@@ -196,7 +196,6 @@ var OACClimateRisk = new Class({
 		// now we clean and do more label work;
 		data = data.intelclean(0);
 		data = data.data;
-		console.log(data);
 		if(currentgraph.rescale) {
 		    currentgraph.options.labels = labels;
 		    currentgraph.options.min = min;
