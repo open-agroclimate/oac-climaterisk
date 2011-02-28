@@ -6,7 +6,7 @@ var OACClimateRisk = new Class({
 		element: document.id('climaterisk-ui-container'),
 		defaultSelect: []
 	},
-	data:   [],
+	data: [],
 	axis: [],
 	tabledata: [],
 	linkedpaper: null,
@@ -137,6 +137,7 @@ var OACClimateRisk = new Class({
 		var data   = this.data[tabindex].data[enso][dataindex],
 		    min    = this.data[tabindex].min[dataindex] || this.data[tabindex].min,
 			max    = this.data[tabindex].max[dataindex] || this.data[tabindex].max,
+			title = document.id('vartype').getChildren('option:selected').get('text')[0],
 			labels = [],
 			currentgraph, el, element;
 		
@@ -161,9 +162,9 @@ var OACClimateRisk = new Class({
 				type: (tabindex == 2 ) ? 'linechart' : 'barchart',
 				labels: labels,
 				graphOptions: {
-					title: 'Example '+tabindex,
-					xlabel: 'Hecho',
-					ylabel: 'Mexico'
+					title:  title.slice(0,title.indexOf('(')-1),
+					xlabel: this.axis[tabindex].xlabel,
+					ylabel: this.axis[tabindex].ylabel
 				},
 				chartOptions: {
 					colors: (tabindex === 3) ? ['#808080'] : this.graphcolor,
