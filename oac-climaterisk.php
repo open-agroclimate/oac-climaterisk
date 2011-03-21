@@ -90,48 +90,48 @@ class OACClimateRisk {
 	
 	public static function tabs() {
 		$output = <<<ENDTABS
-		<div id="tabs">
-			<ul>
-				<li><a href="#" style="font-size: .6em;">Average &amp; Deviation</a></li>
-				<li><a href="#" style="font-size: .6em;">Probability Distribution</a></li>
-				<li><a href="#" style="font-size: .6em;">Probability of Exceedance</a></li>
-				<li><a href="#" style="font-size: .6em;">Last 5 Years</a></li>
+		<div>
+			<ul id="tabs">
+				<li class="selected">Average &amp; Deviation</li>
+				<li>Probability Distribution</li>
+				<li>Probability of Exceedance</li>
+				<li>Last 5 Years</li>
 			</ul>
-			<div class="tabs" id="tabs-1" style="font-size: .6em;">
+			<div class="tabcontent selected" id="tabs-1" style="font-size: .6em;">
 				<table id="avg-deviation-table" class="oac-table">
 ENDTABS;
 		$output .= self::month_table_header( true );
 		$output .= '<tbody></tbody>';
 		$output .= <<<ENDTABS
 				</table>
-				<div id="avg-deviation-chart" class="oac-chart" style="height: 300px; width: 600px;"></div>
+				<div id="avg-deviation-chart" class="oac-chart""></div>
 			</div>
-			<div class="tabs" id="tabs-2" style="font-size: .6em;">
+			<div class="tabcontent" id="tabs-2" style="font-size: .6em;">
 				<table id="prob-dist-table" class="oac-table">
 ENDTABS;
 		$output .= self::month_table_header();
 		$output .= '<tbody></tbody>';
 		$output .= <<<ENDTABS
 				</table>
-				<div id="prob-dist-chart" class="oac-chart" style="height: 300px; width: 600px;"></div>
+				<div id="prob-dist-chart" class="oac-chart"></div>
 			</div>
-			<div class="tabs" id="tabs-3" style="font-size: .6em;">
+			<div class="tabcontent" id="tabs-3" style="font-size: .6em;">
 				<table id="prob-exceed-table" class="oac-table">
 ENDTABS;
 		$output .= self::month_table_header();
 		$output .= '<tbody></tbody>';
 		$output .= <<<ENDTABS
 				</table>
-				<div id="prob-exceed-chart" class="oac-chart" style="height: 300px; width: 600px;"></div>
+				<div id="prob-exceed-chart" class="oac-chart"></div>
 			</div>
-			<div class="tabs" id="tabs-4" style="font-size: .6em;">
+			<div class="tabcontent" id="tabs-4" style="font-size: .6em;">
 				<table id="five-year-table" class="oac-table">
 ENDTABS;
 		$output .= self::month_table_header( true );
 		$output .= '<tbody></tbody>';
 		$output .= <<<ENDTABS
 				</table>
-				<div id="five-year-chart" class="oac-chart" style="height: 300px; width: 600px;"></div>
+				<div id="five-year-chart" class="oac-chart"></div>
 			</div>
 		</div>
 ENDTABS;

@@ -137,7 +137,7 @@ var OACClimateRisk = new Class({
 			table.empty();
 			if(index === 3) enso = 0;
 			this.tabledata[index][enso].each(function(row, i) { table.push(row); });
-			[1,2,3,4].each(function(_i, i) { table.toElement().removeClass('oac-enso-'+i); });
+			[1,2,3,4].each(function(i, _i) { table.toElement().removeClass('oac-enso-'+i); });
 			table.toElement().addClass('oac-enso-'+((index === 3) ? 4 : this.enso));
 			if(instanceOf(this.graphs[index], OACGraph)) {
 				 this.graphs[index].rescale = true;
@@ -247,8 +247,8 @@ var OACClimateRisk = new Class({
 			if( currentgraph.options.overlay !== {} ) {
 			    currentgraph.options.overlay.chartOptions = {
 			        colors: this.graphcolor,
-			        from: min,
-			        to: max,
+			        from:   min,
+			        to:     max,
 			        symbol: 'o'
 			    };
 			}
@@ -257,6 +257,15 @@ var OACClimateRisk = new Class({
 		} else {
 			currentgraph.draw(data);
 		}
+	},
+	
+	tabSwitch: function( tabindex ) {
+	    var enso = this.enso-1,
+	        dataindex = this.options.defaultSelect[tabindex];
+	    
+	    if(tabindex === 3) enso = 0;
+	    this.graphs[tabindex].rescale = true;
+	    this.drawGraph(((tabindex === 0) || (tabindex === 3)) ? dataindex : dataindex-1, tabindex, enso);
 	}
 });
 
@@ -272,5 +281,8 @@ window.addEvent('domready', function() {
 		}, new OACScope({
 			scope: 'location',
 			element: climateRiskElement.getElementById('oac_scope_location')
-		}));	
+		}));
+	    // Tabbing go
+        simpleTabs($$("#tabs li"), $$(".tabcontent"), climateRisk.tabSwitch.bind(climateRisk));
+    
 });
