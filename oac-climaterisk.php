@@ -92,12 +92,12 @@ class OACClimateRisk {
 		$output = <<<ENDTABS
 		<div id="tabs">
 			<ul>
-				<li><a href="#tabs-1" style="font-size: .6em;">Average &amp; Deviation</a></li>
-				<li><a href="#tabs-2" style="font-size: .6em;">Probability Distribution</a></li>
-				<li><a href="#tabs-3" style="font-size: .6em;">Probability of Exceedance</a></li>
-				<li><a href="#tabs-4" style="font-size: .6em;">Last 5 Years</a></li>
+				<li><a href="#" style="font-size: .6em;">Average &amp; Deviation</a></li>
+				<li><a href="#" style="font-size: .6em;">Probability Distribution</a></li>
+				<li><a href="#" style="font-size: .6em;">Probability of Exceedance</a></li>
+				<li><a href="#" style="font-size: .6em;">Last 5 Years</a></li>
 			</ul>
-			<div id="tabs-1" style="font-size: .6em;">
+			<div class="tabs" id="tabs-1" style="font-size: .6em;">
 				<table id="avg-deviation-table" class="oac-table">
 ENDTABS;
 		$output .= self::month_table_header( true );
@@ -106,7 +106,7 @@ ENDTABS;
 				</table>
 				<div id="avg-deviation-chart" class="oac-chart" style="height: 300px; width: 600px;"></div>
 			</div>
-			<div id="tabs-2" style="font-size: .6em;">
+			<div class="tabs" id="tabs-2" style="font-size: .6em;">
 				<table id="prob-dist-table" class="oac-table">
 ENDTABS;
 		$output .= self::month_table_header();
@@ -115,7 +115,7 @@ ENDTABS;
 				</table>
 				<div id="prob-dist-chart" class="oac-chart" style="height: 300px; width: 600px;"></div>
 			</div>
-			<div id="tabs-3" style="font-size: .6em;">
+			<div class="tabs" id="tabs-3" style="font-size: .6em;">
 				<table id="prob-exceed-table" class="oac-table">
 ENDTABS;
 		$output .= self::month_table_header();
@@ -124,7 +124,7 @@ ENDTABS;
 				</table>
 				<div id="prob-exceed-chart" class="oac-chart" style="height: 300px; width: 600px;"></div>
 			</div>
-			<div id="tabs-4" style="font-size: .6em;">
+			<div class="tabs" id="tabs-4" style="font-size: .6em;">
 				<table id="five-year-table" class="oac-table">
 ENDTABS;
 		$output .= self::month_table_header( true );
