@@ -16,11 +16,11 @@ var OACClimateRisk = new Class({
 		if( this.options.element === null ) return;
 		if( this.options.defaultSelect.length === 0 ) {
 			m = (new Date().getMonth())+1;
-			this.options.defaultSelect[0, m, m, 0];
+			this.options.defaultSelect = [0, m, m, 0];
 		}
 		this.scope = scope;
-		ensoel  = this.options.element.getElement('input[name="ensophase"]:checked');
-		this.enso    = ensoel.get('value');
+		ensoel	= this.options.element.getElement('input[name="ensophase"]:checked');
+		this.enso	 = ensoel.get('value');
 		this.tables = this.options.element.getElements('.oac-table');
 		this.graphs = this.options.element.getElements('.oac-chart');
 		this.graphcolor = [ensoel.getParent().getStyle('background-color')];
@@ -46,18 +46,26 @@ var OACClimateRisk = new Class({
 					rowindex = row.getParent().getChildren('tr').indexOf(row),
 					enso = this.enso-1;
 				if( tableindex === 3 ) enso = 0;
+				this.options.defaultSelect[tableindex] = rowindex;
 				this.drawGraph(rowindex, tableindex, enso);
 			}.bind(this),
 			clickCol: function(colindex, col) {
 				var table = col[0].getParents('table')[0],
-				    tableindex = this.options.element.getElements('table').indexOf(table),
+					tableindex = this.options.element.getElements('table').indexOf(table),
 					enso = this.enso-1;
+				this.options.defaultSelect[tableindex] = colindex;
 				this.drawGraph(colindex-1, tableindex, enso);
+			}.bind(this),
+			genTables: function() {
+				ensoel          = this.options.element.getElement('input[name="ensophase"]:checked');
+				this.enso       = ensoel.get('value');
+				this.graphcolor = [ensoel.getParent().getStyle('background-color')];
+				this.genTables();
 			}.bind(this)
 		};
 		this.tables.each(function(table, index) {
 			var rowtable = ((index === 0) || (index === 3)),
-			    t = new HtmlTable(table, {
+				t = new HtmlTable(table, {
 					selectable: rowtable,
 					columnSelectable: !rowtable,
 					classRowSelected: 'oac-data-selected',
@@ -65,11 +73,14 @@ var OACClimateRisk = new Class({
 					hasIndexColumn: true,
 					onRowFocus: this.bound.clickRow,
 					onColFocus: this.bound.clickCol
-			    });
+				});
 			this.tables[index] = t;
 			this.tabledata[index] = {};
 		}, this);
 		// First bind our custom events to the scope
+		this.options.element.getElements('input[name="ensophase"]').addEvent('change', this.bound.genTables);
+		this.options.element.getElement('#vartype').addEvent('change', this.bound.req);
+		
 		this.scope.finalQueue.add(this.bound.req);
 		this.bound.req();
 	},
@@ -99,7 +110,7 @@ var OACClimateRisk = new Class({
 			}, this);
 			alldata = this.data[index].data.flatten();
 			alldata =  alldata.filter(function(itm, idx) {
-			    return typeOf(Number.from(itm)) === 'number';
+				return typeOf(Number.from(itm)) === 'number';
 			});
 			if(index === 0) {
 				l = tmpdata.length;
@@ -126,34 +137,46 @@ var OACClimateRisk = new Class({
 			table.empty();
 			if(index === 3) enso = 0;
 			this.tabledata[index][enso].each(function(row, i) { table.push(row); });
+			[1,2,3,4].each(function(_i, i) { table.toElement().removeClass('oac-enso-'+i); });
 			table.toElement().addClass('oac-enso-'+((index === 3) ? 4 : this.enso));
 			if(instanceOf(this.graphs[index], OACGraph)) {
-			     this.graphs[index].rescale = true;
-		    }
+				 this.graphs[index].rescale = true;
+			}
+			if((index === 0) || (index === 3)) {
+				table.selectRow(table.body.rows[this.options.defaultSelect[index]]);
+			} else {
+				table.selectColumnByIndex(this.options.defaultSelect[index]);
+			}
 		}, this);
 	},
 	
 	drawGraph: function(dataindex, tabindex, enso) {
 		var data   = this.data[tabindex].data[enso][dataindex],
-		    min    = this.data[tabindex].min[dataindex] || this.data[tabindex].min,
-			max    = this.data[tabindex].max[dataindex] || this.data[tabindex].max,
+			min	   = this.data[tabindex].min[dataindex] || this.data[tabindex].min,
+			max	   = this.data[tabindex].max[dataindex] || this.data[tabindex].max,
 			title = document.id('vartype').getChildren('option:selected').get('text')[0],
 			labels = [],
 			currentgraph, el, element;
 		
+		if(tabindex === 3) {
+		    min = Math.min(min, this.data[0].min[0]);
+		    max = Math.max(max, this.data[0].max[0]);
+		}
 		
 		if( !instanceOf(this.graphs[tabindex], OACGraph)) {
-		    if( tabindex === 0 || tabindex === 3) {
-        		this.tables[tabindex].toElement().getChildren('thead th').each(function(label,i) {
-        		   labels.push(label.get('text')); 
-        		});
-        		labels = labels.slice(1,labels.length-1);
-        	} else {
-        	    this.tables[tabindex].toElement().getElements('tbody tr td:nth-child(1)').each(function(label,i) {
-        	       labels.push(label.get('text')); 
-        	    });
-        	}
+			if( tabindex === 0 || tabindex === 3) {
+				this.tables[tabindex].toElement().getChildren('thead th').each(function(label,i) {
+				   labels.push(label.get('text')); 
+				});
+				labels = labels.slice(1,labels.length-1);
+			} else {
+				this.tables[tabindex].toElement().getElements('tbody tr td:nth-child(1)').each(function(label,i) {
+				   labels.push(label.get('text')); 
+				});
+			}
 			this.graphs[tabindex] = new OACGraph({
+			    height: 300,
+		        width:  600,
 				linkpaper: (tabindex === 0),
 				linkedpaper: (tabindex === 0) ? this.linkedpaper : undefined,
 				element: this.graphs[tabindex],
@@ -161,51 +184,79 @@ var OACClimateRisk = new Class({
 				max: max,
 				type: (tabindex == 2 ) ? 'linechart' : 'barchart',
 				labels: labels,
+				overlay: (tabindex === 3) ? {
+				    type: 'linechart', 
+				    chartOptions: { color: this.graphcolor, shade: false, symbol: 'o', to: max, from: min } 
+				} : {},
 				graphOptions: {
-					title:  title.slice(0,title.indexOf('(')-1),
+					title:	title.slice(0,title.indexOf('(')-1),
 					xlabel: this.axis[tabindex].xlabel,
 					ylabel: this.axis[tabindex].ylabel
 				},
 				chartOptions: {
 					colors: (tabindex === 3) ? ['#808080'] : this.graphcolor,
 					centeraxis: (tabindex === 0),
-    				to: max,
-    				from: min > 0 ? 0 : min,
-    				shade: true,
-    				symbol: 'o'
+					to: max,
+					from: min > 0 ? 0 : min,
+					shade: true,
+					symbol: 'o'
 				}
 			});
 		}
 		currentgraph = this.graphs[tabindex];
 		if( tabindex !== 3)
 			currentgraph.rescale = true;
+        else
+            currentgraph.options.overlay.data = this.data[0].data[this.enso-1][0];
+		    
 		
 		if( (tabindex === 1) || (tabindex === 2)  ) {
-		    this.tables[tabindex].toElement().getElements('tbody tr td:nth-child(1)').each(function(label,i) {
-    	       labels.push(label.get('text')); 
-    	    });
-		    left = data.intelfuzzyltrim(((tabindex === 1) ? 0 : 100),2);
-		    right = left.data.intelfuzzyrtrim(0,2);
-		    if( left.index !== null || right.index !== null ) {
-    	        labels = labels.slice((left.index === null) ? 0 : left.index, (right.index ===null) ? labels.length : right.index+left.index);
-    	    } else {
-    	        labels = labels;
-    	    }
-    	    data = right.data;
+			this.tables[tabindex].toElement().getElements('tbody tr td:nth-child(1)').each(function(label,i) {
+			   labels.push(label.get('text')); 
+			});
+			left = data.intelfuzzyltrim(((tabindex === 1) ? 0 : 100),3);
+			right = left.data.intelfuzzyrtrim(0,3);
+			if( left.index !== null || right.index !== null ) {
+				labels = labels.slice((left.index === null) ? 0 : left.index, (right.index ===null) ? labels.length : right.index+left.index);
+			} else {
+				labels = labels;
+			}
+			data = right.data;
 		}
 		if(labels.length === 0) labels = currentgraph.options.labels;
 		// now we clean and do more label work;
 		data = data.intelclean(0);
 		data = data.data;
 		if(currentgraph.rescale) {
-		    currentgraph.options.labels = labels;
-		    currentgraph.options.min = min;
-		    currentgraph.options.max = max;
-		    currentgraph.redraw(data, true);
-		    currentgraph.rescale = false;
+		    if(tabindex === 0) {
+    	        if (min < 0) {
+        		    currentgraph.options.type = 'deviationbarchart';
+    		    } else {
+    		        currentgraph.options.type = 'barchart';
+    		    }
+    		}
+		    currentgraph.options.graphOptions = {
+		        title: title.slice(0,title.indexOf('(')-1),
+		        xlabel: this.axis[tabindex].xlabel,
+			    ylabel: this.axis[tabindex].ylabel
+			};
+			currentgraph.options.labels = labels;
+			currentgraph.options.min = min;
+			currentgraph.options.max = max;
+			currentgraph.options.chartOptions.colors = (tabindex === 3 ) ? ['#808080']: this.graphcolor;
+			if( currentgraph.options.overlay !== {} ) {
+			    currentgraph.options.overlay.chartOptions = {
+			        colors: this.graphcolor,
+			        from: min,
+			        to: max,
+			        symbol: 'o'
+			    };
+			}
+			currentgraph.redraw(data, true, labels);
+			currentgraph.rescale = false;
 		} else {
-    		currentgraph.draw(data);
-    	}
+			currentgraph.draw(data);
+		}
 	}
 });
 
@@ -214,8 +265,8 @@ window.addEvent('domready', function() {
 	// If you use an inline minifier like wp-minify, all bets are off and you should hardcode
 	// the path to your ajax handler(s).
 	var climateRiskHandler = (($$('script[src*="oac-climaterisk.js"]')[0].getProperty('src').toURI().get('directory'))+'../oac-climaterisk-ajax.php').toURI().toString(),
-	    climateRiskElement = document.id('climaterisk-ui-container'),
-	    climateRisk = new OACClimateRisk({
+		climateRiskElement = document.id('climaterisk-ui-container'),
+		climateRisk = new OACClimateRisk({
 			handler: climateRiskHandler,
 			element: climateRiskElement
 		}, new OACScope({
