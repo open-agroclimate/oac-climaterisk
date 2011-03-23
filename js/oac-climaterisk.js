@@ -44,17 +44,21 @@ var OACClimateRisk = new Class({
 				var table = row.getParents('table')[0],
 					tableindex = this.options.element.getElements('table').indexOf(table),
 					rowindex = row.getParent().getChildren('tr').indexOf(row),
+					draw = (table.getParent('.tabcontent').getStyle('display') !== 'none' ),
 					enso = this.enso-1;
 				if( tableindex === 3 ) enso = 0;
 				this.options.defaultSelect[tableindex] = rowindex;
-				this.drawGraph(rowindex, tableindex, enso);
+				if(draw)
+    				this.drawGraph(rowindex, tableindex, enso);
 			}.bind(this),
 			clickCol: function(colindex, col) {
 				var table = col[0].getParents('table')[0],
 					tableindex = this.options.element.getElements('table').indexOf(table),
+					draw = (table.getParent('.tabcontent').getStyle('display') !== 'none' ),
 					enso = this.enso-1;
 				this.options.defaultSelect[tableindex] = colindex;
-				this.drawGraph(colindex-1, tableindex, enso);
+				if(draw)
+    				this.drawGraph(colindex-1, tableindex, enso);
 			}.bind(this),
 			genTables: function() {
 				ensoel          = this.options.element.getElement('input[name="ensophase"]:checked');
@@ -98,7 +102,7 @@ var OACClimateRisk = new Class({
 			this.tabledata[index] = Array.clone(item.data);
 			item.data.each( function( itm, idx ) {
 				itm.each( function( it, id ) {
-					this.data[index].data[idx][id] = it.slice(1, (((index == 0) || (index == 3)) ? it.length-1 : undefined));
+					this.data[index].data[idx][id] = it.slice(1, (((index == 0) || (index == 3)) ? it.length-1 : it.length));
 					if( index === 0 ) {
 						if(!tmpdata[id]) tmpdata[id] = [];
 						tmpdata[id].push(this.data[index].data[idx][id]);
