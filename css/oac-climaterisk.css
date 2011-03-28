@@ -3,13 +3,11 @@
 	border: 1px solid #ccc;
 	margin-left: 1px;
 	border-collapse: collapse !important;
-	border-top: 0px;
 }
 
 #avg-deviation-table th, #avg-deviation-table tr td, #prob-dist-table th, #prob-dist-table tr td, #prob-exceed-table th, #prob-exceed-table tr td, #five-year-table th, #five-year-table tr td{
 	padding: 8px 5px;
 	border: 1px solid #ccc;
-	
 }
 
 #avg-deviation-table th, #prob-dist-table th, #prob-exceed-table th, #five-year-table th{
