@@ -53,7 +53,10 @@ class OACClimateRisk {
 
 	public static function initialize() {
 		OACBase::init();
-		self::$location_scope = new WPScoper( 'location' );
+		$filter = null;
+		$filters = get_option( 'oac_scope_filters', null );
+		if( $filters !== null ) $filter = array_key_exists( 'location_climaterisk', $filters ) ? $filters['location_climaterisk'] : null;
+		self::$location_scope = new WPScoper( 'location', $filter );
 	}
 
 
@@ -104,7 +107,7 @@ ENDTABS;
 		$output .= '<tbody></tbody>';
 		$output .= <<<ENDTABS
 				</table>
-				<div id="avg-deviation-chart" class="oac-chart""></div>
+				<div id="avg-deviation-chart" class="oac-chart" style="height: 300px; width: 600px;"></div>
 			</div>
 			<div class="tabcontent" id="tabs-2" style="font-size: .6em;">
 				<table id="prob-dist-table" class="oac-table">
