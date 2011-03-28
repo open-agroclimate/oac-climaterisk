@@ -152,7 +152,7 @@ ENDTABS;
 		$regex = get_shortcode_regex();
 		preg_match('/'.$regex.'/s', $post->post_content, $matches);
 		if ((isset( $matches[2])) && ($matches[2] == 'oac_climaterisk')) {
-			wp_enqueue_style ( 'oacbase' );
+			wp_enqueue_style( 'oacclimaterisk', plugins_url( 'css/oac-climaterisk.css', __FILE__ ), array( 'oacbase' ) );
 			wp_register_script( 'oac_climaterisk', plugins_url( 'js/oac-climaterisk.js', __FILE__ ),
 				array( 'oac-base', 'mootools-array-math', 'mootools-table-colsel', 'oac-barchart', 'oac-linechart' )
 			);
