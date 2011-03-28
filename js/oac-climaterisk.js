@@ -82,7 +82,10 @@ var OACClimateRisk = new Class({
 			this.tabledata[index] = {};
 		}, this);
 		// First bind our custom events to the scope
-		this.options.element.getElements('input[name="ensophase"]').addEvent('change', this.bound.genTables);
+		this.options.element.getElements('input[name="ensophase"]').addEvents({
+			'change': this.bound.genTables,
+			'click' : function() { this.blur(); }
+		});
 		this.options.element.getElement('#vartype').addEvent('change', this.bound.req);
 		
 		this.scope.finalQueue.add(this.bound.req);

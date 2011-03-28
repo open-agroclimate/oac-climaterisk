@@ -83,7 +83,7 @@ class OACClimateRiskAjax {
 			$data[$enso][$rowindex][] = $rowindex;
 			foreach( $row as $item ) {
 				if( is_null( $item ) ) {
-					$data[$enso][$rowindex][] = __("N/A");
+					$data[$enso][$rowindex][] = __( "N/A", 'oac_climaterisk' );
 				} else {
 					$data[$enso][$rowindex][] = (float) $item;
 				}
@@ -120,22 +120,22 @@ class OACClimateRiskAjax {
 		
 		$xlabel = $ylabel = $yunits = '';
 		if( ( $tab == 0 ) || ( $tab == 3 ) ) {
-			$xlabel = __('Month');
+			$xlabel = __( 'Month', 'oac_climaterisk' );
 			if( $vartype == 'RAIN' ) {
 				$yunits = $len_units['abbr'];
-				$ylabel = __('Rainfall').' ('.$yunits.')';
+				$ylabel = __( 'Rainfall', 'oac_climaterisk' ).' ('.$yunits.')';
 			} else {
 				$yunits = "°".substr( $temp_units['abbr'], -1);
-				$ylabel = __('Temperature').'  ('.$yunits.')';
+				$ylabel = __( 'Temperature', 'oac_climaterisk' ).'  ('.$yunits.')';
 			}
 		} else {
 			$yunits = '%';
-			$ylabel = __('Probability').' (%)';
+			$ylabel = __( 'Probability', 'oac_climaterisk' ).' (%)';
 			if( $vartype == 'RAIN' ) {
-				$xlabel = __('Rainfall').' ('.$len_units['abbr'].')';
+				$xlabel = __( 'Rainfall', 'oac_climaterisk' ).' ('.$len_units['abbr'].')';
 			} else {
 				$xunits = "°".substr( $temp_units['abbr'], -1);
-				$xlabel = __('Temperature').'  ('.$xunits.')';
+				$xlabel = __( 'Temperature', 'oac_climaterisk' ).'  ('.$xunits.')';
 			}
 		}
 		

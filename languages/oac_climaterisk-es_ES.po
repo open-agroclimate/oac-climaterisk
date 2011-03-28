@@ -1,0 +1,146 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Open AgroClimate: Climate Risk Tool\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-03-28 14:34-0500\n"
+"PO-Revision-Date: 2011-03-28 14:34-0500\n"
+"Last-Translator: Christopher Villalobos <cvillalobos@ufl.edu>\n"
+"Language-Team: Open AgroClimate Project <open@agroclimate.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;_e;_c;__\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals = 2; plural = n != 1\n"
+"X-Poedit-Language: English\n"
+"X-Poedit-Country: UNITED STATES\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ..\n"
+
+#: ../oac-climaterisk-ajax.php:86
+msgid "N/A"
+msgstr ""
+
+#: ../oac-climaterisk-ajax.php:123
+msgid "Month"
+msgstr "Mes"
+
+#: ../oac-climaterisk-ajax.php:126
+#: ../oac-climaterisk-ajax.php:135
+msgid "Rainfall"
+msgstr "Lluvia"
+
+#: ../oac-climaterisk-ajax.php:129
+#: ../oac-climaterisk-ajax.php:138
+msgid "Temperature"
+msgstr "Temperatura"
+
+#: ../oac-climaterisk-ajax.php:133
+msgid "Probability"
+msgstr "Probabilidad"
+
+#: ../oac-climaterisk.php:17
+msgid "You do not have sufficient permission to access this page."
+msgstr ""
+
+#: ../oac-climaterisk.php:24
+msgid "Climate Risk Tool"
+msgstr "Herramientas de Riesgo Climático"
+
+#: ../oac-climaterisk.php:31
+msgid "Climate Risk Tool Settings"
+msgstr "Ajustes de las Herramientas de Riesgo Climático"
+
+#: ../oac-climaterisk.php:72
+msgid "Total Rainfall"
+msgstr "Lluvia Total"
+
+#: ../oac-climaterisk.php:73
+msgid "Average Min. Temp"
+msgstr "Pro. de Temp. Mín."
+
+#: ../oac-climaterisk.php:74
+msgid "Average Max. Temp"
+msgstr "Pro. de Temp. Máx."
+
+#: ../oac-climaterisk.php:75
+msgid "Monthly Min. Temp"
+msgstr "Temp. Mín. Mensual"
+
+#: ../oac-climaterisk.php:76
+msgid "Monthly Max. Temp"
+msgstr "Temp. Máx. Mensual"
+
+#: ../oac-climaterisk.php:77
+msgid "Variable Type"
+msgstr "Tipo de Variable"
+
+#: ../oac-climaterisk.php:93
+msgid "Jan"
+msgstr "Ene"
+
+#: ../oac-climaterisk.php:93
+msgid "Feb"
+msgstr "Feb"
+
+#: ../oac-climaterisk.php:93
+msgid "Mar"
+msgstr "Mar"
+
+#: ../oac-climaterisk.php:93
+msgid "Apr"
+msgstr "Abr"
+
+#: ../oac-climaterisk.php:93
+msgid "May"
+msgstr "May"
+
+#: ../oac-climaterisk.php:93
+msgid "Jun"
+msgstr "Jun"
+
+#: ../oac-climaterisk.php:93
+msgid "Jul"
+msgstr "Jul"
+
+#: ../oac-climaterisk.php:93
+msgid "Aug"
+msgstr "Ago"
+
+#: ../oac-climaterisk.php:93
+msgid "Sep"
+msgstr "Sep"
+
+#: ../oac-climaterisk.php:93
+msgid "Oct"
+msgstr "Oct"
+
+#: ../oac-climaterisk.php:93
+msgid "Nov"
+msgstr "Nov"
+
+#: ../oac-climaterisk.php:93
+msgid "Dec"
+msgstr "Dic"
+
+#: ../oac-climaterisk.php:93
+msgid "Year"
+msgstr "Año"
+
+#: ../oac-climaterisk.php:101
+msgid "Average &amp; Deviation"
+msgstr "Promedio y Desviación"
+
+#: ../oac-climaterisk.php:102
+msgid "Probability Distribution"
+msgstr "Distribución de Probabilidad"
+
+#: ../oac-climaterisk.php:103
+msgid "Probability of Exceedance"
+msgstr "Probabilidad de Superación"
+
+#: ../oac-climaterisk.php:104
+msgid "Last 5 Years"
+msgstr "Últimos 5 Años"
+
