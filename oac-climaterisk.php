@@ -105,39 +105,47 @@ ENDTABS;
         $output .= <<<ENDTABS
             </ul>
             <div class="tabcontent selected" id="tabs-1" style="font-size: .6em;">
-                <table id="avg-deviation-table" class="oac-table">
+				<div class="tableWrap">
+                    <table id="prob-dist-table" class="oac-table">
 ENDTABS;
         $output .= self::month_table_header( true );
         $output .= '<tbody></tbody>';
         $output .= <<<ENDTABS
-                </table>
+                    </table>
+                </div>
                 <div id="avg-deviation-chart" class="oac-chart"></div>
             </div>
             <div class="tabcontent" id="tabs-2" style="font-size: .6em;">
-                <table id="prob-dist-table" class="oac-table">
+                <div class="tableWrap">
+                    <table id="prob-dist-table" class="oac-table">
 ENDTABS;
         $output .= self::month_table_header();
         $output .= '<tbody></tbody>';
         $output .= <<<ENDTABS
-                </table>
+                    </table>
+                </div>
                 <div id="prob-dist-chart" class="oac-chart"></div>
             </div>
             <div class="tabcontent" id="tabs-3" style="font-size: .6em;">
-                <table id="prob-exceed-table" class="oac-table">
+                <div class="tableDiv">
+                    <table id="prob-exceed-table" class="oac-table">
 ENDTABS;
         $output .= self::month_table_header();
         $output .= '<tbody></tbody>';
         $output .= <<<ENDTABS
-                </table>
+                    </table>
+                </div>
                 <div id="prob-exceed-chart" class="oac-chart"></div>
             </div>
             <div class="tabcontent" id="tabs-4" style="font-size: .6em;">
-                <table id="five-year-table" class="oac-table">
+                <div class="tableDiv">
+                    <table id="five-year-table" class="oac-table">
 ENDTABS;
         $output .= self::month_table_header( true );
         $output .= '<tbody></tbody>';
         $output .= <<<ENDTABS
-                </table>
+                    </table>
+                </div>
                 <div id="five-year-chart" class="oac-chart"></div>
             </div>
         </div>
