@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Open AgroClimate: Climate Risk Tool\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-03-28 14:34-0500\n"
-"PO-Revision-Date: 2011-03-28 14:34-0500\n"
-"Last-Translator: Christopher Villalobos <cvillalobos@ufl.edu>\n"
+"PO-Revision-Date: 2011-03-31 20:16-0500\n"
+"Last-Translator: \n"
 "Language-Team: Open AgroClimate Project <open@agroclimate.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../oac-climaterisk-ajax.php:86
 msgid "N/A"
-msgstr ""
+msgstr "N/D"
 
 #: ../oac-climaterisk-ajax.php:123
 msgid "Month"
@@ -42,7 +42,7 @@ msgstr "Probabilidad"
 
 #: ../oac-climaterisk.php:17
 msgid "You do not have sufficient permission to access this page."
-msgstr ""
+msgstr "Usted no tiene permiso suficiente para accesar esta pagina."
 
 #: ../oac-climaterisk.php:24
 msgid "Climate Risk Tool"
