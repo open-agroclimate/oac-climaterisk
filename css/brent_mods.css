@@ -1,0 +1,617 @@
+#mainBodyTools
+{
+	margin-left: 15px;
+	float: left;
+}
+
+legend
+{
+	font-family: Arial;
+	font-size: 10pt;
+	color: #552B00;
+	font-weight: bold;
+	text-align: left;
+	padding: 8px 0 5px 0;
+}
+
+.label
+{
+  background-color: #F3F3F3; !important
+}
+
+.map
+{
+	width: 96%;
+	height: 691px;
+	margin: 2px;
+	float: left;
+}
+
+.exmlStyle
+{
+	font-size: 12px;
+	font-family: Arial,sans-serif;
+	background: none;
+	font-weight: normal;
+	border: 1px #000000 solid;
+	color: white;
+	white-space: nowrap;
+}
+
+.tabs
+{
+	width: 100%;
+	font-size: 90%;
+	background-color: White;
+}
+
+.headBar
+{
+	height: 20px;
+	width: 100%;
+	float: left;
+	font-size: 12px;
+	vertical-align: bottom;
+	font-family: Arial,sans-serif;
+	background: Cornsilk;
+	font-weight: normal;
+	color: Cornsilk;
+	display: none;
+}
+
+.divMain
+{
+	width: 870px;
+	clear: both;
+}
+
+.divTool
+{
+	height: 100%;
+	width: 100%;
+	float: left;
+	margin-top: 15px;
+}
+
+.divLeft
+{
+	height: 100%;
+	width: 185px;
+	float: left;
+	background-color: #EEEEEE;
+}
+
+.divRight
+{
+	height: 100%;
+	width: 655px;
+	float: left;
+	margin: -2px 0 0 10px;
+	position: relative;
+	font-size: 13px;
+	font-family: Arial,sans-serif;
+}
+
+.toolName
+{
+	float: left;
+	font-size: 25px;
+	vertical-align: bottom;
+	font-family: Arial,sans-serif;
+}
+
+.backButton
+{
+	float: right;
+	vertical-align: middle;
+}
+
+.ltButton
+{
+	background: no-repeat url(http://maps.gstatic.com/mapfiles/hpimgs13.png) -29px -65px;
+	width: 21px;
+	height: 20px;
+	float: right;
+}
+
+.gtButton
+{
+	background: no-repeat url(http://maps.gstatic.com/mapfiles/hpimgs13.png) -26px -92px;
+	width: 21px;
+	height: 20px;
+	float: left;
+	display: none;
+}
+
+.helpIcon { float: left; }
+
+.varType
+{
+	font-size: 15px;
+	font-family: Arial,sans-serif;
+	width: 100%;
+	text-align: center;
+	float: inherit;
+}
+
+.stateCounty
+{
+	font-size: 15px;
+	font-family: Arial,sans-serif;
+	width: 100%;
+	float: inherit;
+	padding-top: 10px;
+}
+
+.ensoPhase
+{
+	font-size: 15px;
+	font-family: Arial, sans-serif;
+	width: 100%;
+	float: inherit;
+	padding-top: 15px;
+}
+
+.graphAll
+{
+	font-size: 15px;
+	font-family: Arial,sans-serif;
+	width: 100%;
+	text-align: center;
+	float: inherit;
+	padding-top: 10px;
+	cursor: hand;
+}
+
+.fieldset
+{
+	font-size: 14px;
+	font-family: Arial,sans-serif;
+	padding: 5px;
+	text-align: left;
+	border-width: 1px;
+	border-style: solid;
+	border-color: gray;
+	border-collapse: collapse;
+	background-color: white;
+}
+
+table#avg-deviation-table, table#tabDistribution
+{
+	font-size: 12px;
+	font-family: Arial,sans-serif;
+	text-align: center;
+	padding: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: gray;
+	border-collapse: collapse;
+}
+
+table#avg-deviation-table th, table#tabDistribution th
+{
+	font-family: "Verdana";
+	font-weight: bold;
+	color: black;
+	font-size: 12px;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+table#avg-deviation-table td, table#tabDistribution td
+{
+	border-width: 1px;
+	border-style: solid;
+	padding: 3px;
+	border-color: gray;
+}
+
+table#avg-deviation-table td.bold, table.tabDistribution td#bold
+{
+	font-family: "Verdana";
+	font-weight: bold;
+	color: black;
+	padding: 3px;
+	font-size: 12px;
+}
+
+table#avg-deviation-table, table#tabExceedance
+{
+	font-size: 12px;
+	font-family: Arial,sans-serif;
+	text-align: center;
+	padding: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: gray;
+	border-collapse: collapse;
+}
+
+table#avg-deviation-table th, table#tabExceedance th
+{
+	font-family: "Verdana";
+	font-weight: bold;
+	color: black;
+	font-size: 12px;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+table#avg-deviation-table td, table#tabExceedance td
+{
+	border-width: 1px;
+	border-style: solid;
+	padding: 3px;
+	border-color: gray;
+}
+
+table#avg-deviation-table td.bold, table#tabExceedance td.bold
+{
+	font-family: "Verdana";
+	font-weight: bold;
+	color: black;
+	padding: 3px;
+	font-size: 12px;
+}
+
+table#avg-deviation-table, table#tab5Years
+{
+	font-size: 12px;
+	font-family: Arial,sans-serif;
+	text-align: center;
+	padding: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: gray;
+	border-collapse: collapse;
+}
+
+table#avg-deviation-table th, table#tab5Yearsth
+{
+	font-family: "Verdana";
+	font-weight: bold;
+	color: black;
+	font-size: 12px;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+table#avg-deviation-table td, table#tab5Yearstd
+{
+	border-width: 1px;
+	border-style: solid;
+	padding: 3px;
+	border-color: gray;
+}
+
+table#avg-deviation-table td.bold, table#tab5Years td.bold
+{
+	font-family: "Verdana";
+	font-weight: bold;
+	color: black;
+	padding: 3px;
+	font-size: 12px;
+}
+
+table.datatable
+{
+	FONT-SIZE: 13px;
+	font-family: Verdana;
+	text-align: center;
+	FONT-WEIGHT: normal;
+	BORDER-WIDTH: 1px;
+	BORDER-STYLE: solid;
+	BORDER-COLOR: gray;
+	BORDER-COLLAPSE: collapse;
+	BACKGROUND-COLOR: #F9F9F9;
+}
+
+/* EnsoActive: 1-neutral; 2-elnino; 3-lanina; 4-allYears */
+.minigraph {
+  height: 200px;
+  width: 300px;
+  display: inline-block;
+}
+
+.row_col_Active
+{
+	background-color: #FFFFCE;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+.EnsoActive1
+{
+	background-color: #00FF66;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+.EnsoActive2
+{
+	background-color: #FF6666;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+.EnsoActive3
+{
+	background-color: #00CCFF;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+.EnsoActive4
+{
+	background-color: #949494;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+.EnsoActive_light1
+{
+	background-color: #8AFFB9;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+.EnsoActive_light2
+{
+	background-color: #FFBBBB;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+.EnsoActive_light3
+{
+	background-color: #9BEBFF;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+.EnsoActive_light4
+{
+	background-color: #D7D7D7;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+.Year_Active
+{
+	background-color: #F2F1DF;
+	color: black;
+	border-width: 1px;
+	padding: 1px;
+	border-style: solid;
+	border-color: gray;
+}
+
+/* Radio Buttons ENSO */
+table.ensoTable tr.neutral td
+{
+	background-color: #00FF66;
+	padding: 5px;
+}
+
+table.ensoTable tr.elnino td
+{
+	background-color: #FF6666;
+	padding: 5px;
+}
+
+table.ensoTable tr.lanina td
+{
+	background-color: #00CCFF;
+	padding: 5px;
+}
+
+table.ensoTable tr.allYears td
+{
+	background-color: #949494;
+	padding: 5px;
+}
+
+table.ensoTable td input { padding-right: 5px; }
+
+span a.bbutton_english
+{
+	float: right;
+	margin: 5px 20px;
+	font-size: 12px;
+	width: 120px;
+	border: 1px #cccccc solid;
+	display: block;
+	padding: 5px;
+	background-color: #eee;
+	font-weight: 700;
+}
+
+span a.bbutton_spanish
+{
+	float: right;
+	margin: 5px 20px;
+	font-size: 12px;
+	width: 180px;
+	border: 1px #cccccc solid;
+	display: block;
+	padding: 5px;
+	background-color: #eee;
+	font-weight: 700;
+}
+
+.jqplot-point-label { white-space: nowrap; }
+.jqplot-axis-label { font-size: 18pt; }
+.jqplot-yaxis-tick { font-size: 7pt; }
+.jqplot { margin: 50px 0px 0px 0px; }
+.jqplot-xaxis { margin-top: 10px; }
+.jqplot-xaxis-tick { padding-top: 0px; }
+.jqplot-yaxis { margin-left: 10px; }
+.jqplot-yaxis { margin-right: 10px; }
+.jqplot-yaxis-tick { padding-right: 0px; }
+
+
+{
+	color: #333333;
+	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+}
+
+.jqplot-axis { font-size: 1.10em; }
+
+.jqplot-legend
+{
+	margin-top: -5px;
+	margin-left: 370px;
+	font-size: 1.10em;
+	font-weight: bold;
+}
+
+.jqplot-title
+{
+	font-weight: bold;
+	font-size: 1.10em;
+}
+
+.clearing
+{
+	display: block;
+	clear: both;
+	font-size: 1px;
+	height: 1px;
+	line-height: 1px;
+	margin: 0;
+}
+
+.divRight { float: left; }
+
+.divLeft
+{
+	padding: 10px;
+	float: left;
+}
+
+.myButton
+{
+	-moz-box-shadow: inset -1px -1px 0px -1px #ffffff;
+	-webkit-box-shadow: inset -1px -1px 0px -1px #ffffff;
+	box-shadow: inset -1px -1px 0px -1px #ffffff;
+	background: -moz-linear-gradient( center top, #badebe 5%, #94b598 100% );
+	background: -webkit-linear-gradient( center top, #badebe 5%, #94b598 100% );
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#badebe', endColorstr='#94b598');
+	background-color: #badebe;
+		border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-box-shadow: 0px 1px 3px rgba(000,000,000,0.5), inset 0px 0px 1px rgba(255,255,255,0.7);
+	-webkit-box-shadow: 0px 1px 3px rgba(000,000,000,0.5), inset 0px 0px 1px rgba(255,255,255,0.7);
+	display: inline-block;
+	color: #555;
+	font-family: arial;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 6px 24px;
+	text-decoration: none;
+	text-shadow: 1px 1px 0px #fff;
+	margin: 5px 10px 5px 0;
+}
+
+.myButton:hover
+{
+	background: -moz-linear-gradient( top, #badebe 0%, #94b598);
+	background: -webkit-linear-gradient( top, #badebe 0%, #94b598);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#94b598', endColorstr='#badebe');
+	background-color: #94b598;
+	color: #000;
+	text-decoration: none;
+}
+
+.myButton:active
+{
+	position: relative;
+	top: 1px;
+}
+
+.buttonTwo
+{
+	color: #555 !important;
+	float: right;
+}
+
+.buttonTwo:hover
+{	
+	background: -moz-linear-gradient( top, #badebe 0%, #94b598);
+	background: -webkit-linear-gradient( top, #badebe 0%, #94b598);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#94b598', endColorstr='#badebe');
+	background-color: #94b598;
+	color: #000 !important;
+	text-decoration: none;
+}
+
+.buttonTwo:active
+{
+	position: relative;
+	top: 1px;
+}
+
+.myButtonThree
+{
+	float: left;
+	text-decoration: none !important;
+}
+
+.myButtonThree:hover
+{
+	background: -moz-linear-gradient( top, #badebe 0%, #94b598);
+	background: -webkit-linear-gradient( top, #badebe 0%, #94b598);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#94b598', endColorstr='#badebe');
+	background-color: #94b598;
+	color: #000;
+	text-decoration: none;
+}
+
+.myButtonThree:active
+{
+	position: relative;
+	top: 1px;
+}
+
+.cropImg
+{
+	border: 1px solid #ccc;
+	margin: 0;
+	float: left;
+	width: 180px;
+	height: 91px;
+}
